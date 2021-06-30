@@ -3,18 +3,19 @@ const chalk = require("chalk");
 const request = require("postman-request");
 const constants = require("./constants.js");
 
-getWeatherCurrentWithQuery = (query) => {
-  request(
-    { url: constants.getAPICurrentUrlWithQuery(query), json: true },
-    (error, response) => {
+getWeatherCurrentWithQuery = (query, placeName) => {
+  const url = constants.getAPICurrentUrlWithQuery(query);
+  utils.log("URL WeatherStack: " + url);
+  request({ url: url, json: true }, (error, response) => {
+    try {
       debugger;
       // utils.log(chalk.green(JSON.parse(response)));
       const response1 = response;
       const body = response1.body;
       const current = body.current;
-      utils.log(chalk.magenta("CURRENT: "));
+      utils.log(chalk.magenta('Current weather of "' + placeName + '": '));
       utils.log(
-        chalk.green("Weather Description: " + current.weather_descriptions[0])
+        chalk.green("Weather Description: \n" + current.weather_descriptions[0])
       );
       utils.log(
         chalk.green(
@@ -25,38 +26,44 @@ getWeatherCurrentWithQuery = (query) => {
             "% chance of rain."
         )
       );
+    } catch (e) {
+      utils.log(chalk.red("Error occurred! Something went wrong while querying your request on WeatherStack!"));
     }
-  );
+  });
 };
 
 getWeatherForecastWithQuery = (query) => {
-  request(
-    { url: constants.getAPIForecastUrlWithQuery("Lahore"), json: true },
-    (error, response) => {
-      debugger;
-      // utils.log(chalk.green(JSON.parse(response)));
-      const response1 = response;
-      const body = response1.body;
-      const current = body.current;
-      utils.log(chalk.magenta("FORECAST: "));
-      utils.log(chalk.green(JSON.stringify(current)));
-    }
-  );
+  const url = constants.getAPIForecastUrlWithQuery("Lahore");
+  utils.log("URL WeatherStack: " + url);
+  request({ url: url, json: true }, (error, response) => {
+    debugger;
+    // utils.log(chalk.green(JSON.parse(response)));
+    const response1 = response;
+    const body = response1.body;
+    const current = body.current;
+    utils.log(chalk.magenta("FORECAST: "));
+    utils.log(chalk.green(JSON.stringify(current)));
+  });
 };
 
 getMapBoxGeoCodeWithQuery = (query) => {
-    request(
-        {url: constants.getAPIMabBoxBaseUrlWithQuery(query), json: true}, 
-        (error,response) => {
-            debugger;
-            const response1 = response;
-            const body = response1.body;
-            const features = body.features;
-            const feature = features[0];
-            const center = feature.center;
-            getWeatherCurrentWithQuery(center.join(","))
-        }
-    )
-}
-getMapBoxGeoCodeWithQuery("Karachi");
-
+  const url = constants.getAPIMabBoxBaseUrlWithQuery(query);
+  utils.log("URL MapBox: " + url);
+  request({ url: url, json: true }, (error, response) => {
+    try {
+      debugger;
+      const response1 = response;
+      const body = response1.body;
+      const features = body.features;
+      const feature = features[0];
+      const center = feature.center;
+      const placeName = feature.place_name;
+      getWeatherCurrentWithQuery(center.join(","), placeName);
+    } catch (e) {
+      utils.log(chalk.red("Error occurred! Something went wrong while querying your request on MapBox!"));
+    }
+  });
+};
+const arg = process.argv[2];
+utils.log(arg);
+getMapBoxGeoCodeWithQuery(arg);

@@ -19,7 +19,7 @@ getAPIForecastUrlWithQuery = (query) => {
 
 const apiKeyMapBox = "pk.eyJ1IjoieGVpZXNoYW4iLCJhIjoiY2txamg3ZXFwMDBsNjJubHY2dWd0bnVrNiJ9.bZBlsmnk5sXlmacT6m4Wgw";
 getAPIMabBoxBaseUrlWithQuery = (query) => {
-  return "https://api.mapbox.com/geocoding/v5/mapbox.places/" +  query + ".json?access_token=" + apiKeyMapBox
+  return "https://api.mapbox.com/geocoding/v5/mapbox.places/" +  query + ".json?access_token=" + apiKeyMapBox + '&limit=1'
 }
 
 
