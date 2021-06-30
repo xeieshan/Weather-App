@@ -1,0 +1,28 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "Asynchronous Non blocking IO NodeJS Weather app",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xeieshan/Weather-App.git"
+  },
+  "keywords": [
+    "weatherapp",
+    "nodejs"
+  ],
+  "author": "Zeeshan Haider",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xeieshan/Weather-App/issues"
+  },
+  "homepage": "https://github.com/xeieshan/Weather-App#readme",
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "postman-request": "^2.88.1-postman.30",
+    "validator": "^13.6.0"
+  }
+}
