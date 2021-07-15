@@ -1,4 +1,4 @@
-const utils = require("./utils");
+const utils = require("./utils/utils");
 const chalk = require("chalk");
 const request = require("postman-request");
 const constants = require("./constants.js");
@@ -7,7 +7,11 @@ getWeatherCurrentWithQuery = (query, placeName) => {
   const url = constants.getAPICurrentUrlWithQuery(query);
   utils.log("URL WeatherStack: " + url);
   request({ url: url, json: true }, (error, response) => {
-    try {
+    if (error) {
+      utils.log(chalk.red("Error occurred! Something went wrong while querying your request on WeatherStack!"));
+    } else if (!response.body.current || !response.body.current.weather_descriptions || response.body.current.weather_descriptions.length === 0){
+      utils.log(chalk.red("Error occurred! Unable to find location via MapBox!"));
+    } else {
       debugger;
       // utils.log(chalk.green(JSON.parse(response)));
       const response1 = response;
@@ -26,9 +30,7 @@ getWeatherCurrentWithQuery = (query, placeName) => {
             "% chance of rain."
         )
       );
-    } catch (e) {
-      utils.log(chalk.red("Error occurred! Something went wrong while querying your request on WeatherStack!"));
-    }
+    } 
   });
 };
 
@@ -50,7 +52,9 @@ getMapBoxGeoCodeWithQuery = (query) => {
   const url = constants.getAPIMabBoxBaseUrlWithQuery(query);
   utils.log("URL MapBox: " + url);
   request({ url: url, json: true }, (error, response) => {
-    try {
+    if (error) {
+      utils.log(chalk.red("Error occurred! Something went wrong while querying your request on MapBox!"));
+    } else {
       debugger;
       const response1 = response;
       const body = response1.body;
@@ -59,8 +63,6 @@ getMapBoxGeoCodeWithQuery = (query) => {
       const center = feature.center;
       const placeName = feature.place_name;
       getWeatherCurrentWithQuery(center.join(","), placeName);
-    } catch (e) {
-      utils.log(chalk.red("Error occurred! Something went wrong while querying your request on MapBox!"));
     }
   });
 };

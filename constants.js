@@ -11,15 +11,15 @@ const apiBaseUrlWeatherStackForecast =
   "&query=";;
 
 getAPICurrentUrlWithQuery = (query) => {
-    return apiBaseUrlWeatherStackCurrent + query
+    return apiBaseUrlWeatherStackCurrent + encodeURIComponent(query)
 }
 getAPIForecastUrlWithQuery = (query) => {
-  return apiBaseUrlWeatherStackForecast + query
+  return apiBaseUrlWeatherStackForecast + encodeURIComponent(query)
 }
 
 const apiKeyMapBox = "pk.eyJ1IjoieGVpZXNoYW4iLCJhIjoiY2txamg3ZXFwMDBsNjJubHY2dWd0bnVrNiJ9.bZBlsmnk5sXlmacT6m4Wgw";
 getAPIMabBoxBaseUrlWithQuery = (query) => {
-  return "https://api.mapbox.com/geocoding/v5/mapbox.places/" +  query + ".json?access_token=" + apiKeyMapBox + '&limit=1'
+  return "https://api.mapbox.com/geocoding/v5/mapbox.places/" +  encodeURIComponent(query) + ".json?access_token=" + apiKeyMapBox + '&limit=1'
 }
 
 
