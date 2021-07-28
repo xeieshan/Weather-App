@@ -5,12 +5,12 @@ const utils = require("./utils.js");
 const getCurrentWeather = (query, callback) => {
   const url = constants.getAPICurrentUrlWithQuery(query);
   utils.log("URL WeatherStack: " + url);
-  request({ url: url, json: true }, (error, response) => {
-    if (error) {
-      callback(error, null);
+  request({ url, json: true }, (error, {body} = {}) => {
+    if (body === undefined) {
+      callback(new Error('Error occurred! Something went wrong while querying your request on WeatherStack!'), {})
+    } else if (error) {
+      callback(error, {});
     } else {
-      const response1 = response;
-      const body = response1.body;
       callback(null, body);
     }
   });

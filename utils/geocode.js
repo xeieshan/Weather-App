@@ -5,16 +5,55 @@ const utils = require("./utils.js");
 const geocode = (address, callback) => {
   const url = constants.getAPIMabBoxBaseUrlWithQuery(address);
   utils.log("URL MapBox: " + url);
-  request({ url: url, json: true }, (error, response) => {
-    if (error) {
-      callback(error, null);
+  request({ url, json: true }, (error, { body } = {}) => {
+    if (body === undefined) {
+      callback(
+        new Error("Error occurred! Something went wrong while querying your request on MapBox!"),
+        {
+          latitude: null,
+          longitude: null,
+          place_name: null,
+        }
+      );
+    } else if (error) {
+      callback(
+        new Error("Error occurred! Something went wrong while querying your request on MapBox!"),
+        {
+          latitude: null,
+          longitude: null,
+          place_name: null,
+        }
+      );
     } else {
-      debugger;
-      const response1 = response;
-      const body = response1.body;
-      const features = body.features;
-      const feature = features[0];
-      callback(null, feature);
+      const { features } = body;
+      if (features === undefined) {
+        callback(
+          new Error("Error occurred! Something went wrong while querying your request on MapBox!"),
+          {
+            latitude: null,
+            longitude: null,
+            place_name: null,
+          }
+        );
+      } else if (features.length === 0) {
+        callback(
+          new Error("Error occurred! Something went wrong while querying your request on MapBox!"),
+          {
+            latitude: null,
+            longitude: null,
+            place_name: null,
+          }
+        );
+      } else {
+        debugger
+        const feature = features[0];
+        const { center, place_name } = feature;
+        callback(null, {
+          latitude: center[1],
+          longitude: center[0],
+          place_name: place_name,
+        });
+      }
     }
   });
 };
