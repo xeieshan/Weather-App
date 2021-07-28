@@ -1,9 +1,9 @@
 const utils = require("./utils/utils");
 const chalk = require("chalk");
-const weather = require('./utils/weather');
-const geocode = require('./utils/geocode');
+const weather = require("./utils/weather");
+const geocode = require("./utils/geocode");
 
-geocode.geocodeAddress("Lahore", (error, data) => {
+geocode.geocodeAddress("London", (error, data) => {
   if (error) {
     utils.log(
       chalk.red(
@@ -13,7 +13,7 @@ geocode.geocodeAddress("Lahore", (error, data) => {
   } else if (data !== null) {
     const center = data.center;
     const placename = data.place_name;
-    weather.getCurrentWeather(center.join(","), (error, data) => {
+    weather.getCurrentWeather(center.reverse().join(","), (error, data) => {
       const current = data.current;
       if (error) {
         utils.log(
@@ -39,9 +39,9 @@ geocode.geocodeAddress("Lahore", (error, data) => {
         utils.log(
           chalk.green(
             "It is currently " +
-              data.temperature +
+              current.temperature +
               " degrees out. There is a " +
-              data.precip +
+              current.precip * 100 +
               "% chance of rain."
           )
         );
